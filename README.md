@@ -1,6 +1,6 @@
 # AgentGuard — The Financial Firewall for AI Agents
 
-AgentGuard is a backend boundary between an AI purchasing agent and payment systems. A user submits a natural-language purchase request; the Groq LLM extracts a structured `PurchaseIntent` from it. A deterministic policy engine then independently evaluates that intent against the user's configured spending limits and purchase policies, and returns one of three decisions: `APPROVED`, `BLOCKED`, or `MANUAL_REVIEW`. Only transactions that reach `APPROVED` status may proceed to create a Razorpay payment order. The LLM has no authority to approve, block, or execute payments — it only reads the purchase request and produces structured data.
+AgentGuard is a backend boundary between an AI purchasing agent and payment systems. A user submits a natural-language purchase request; the Groq LLM extracts a structured `PurchaseIntent` from it. A deterministic policy engine then independently evaluates that intent against the user's configured spending limits and purchase policies, and returns one of three decisions: `APPROVED`, `BLOCKED`, or `MANUAL_REVIEW`. Only transactions that reach `APPROVED` status may proceed to create a Razorpay payment order. The LLM has no authority to approve, block, or execute payments, it only reads the purchase request and produces structured data.
 
 ---
 
@@ -12,8 +12,8 @@ AI agents making autonomous purchasing decisions are a significant financial ris
 
 AgentGuard enforces a strict separation of concerns:
 
-- The **LLM layer** handles natural language — nothing else.
-- The **policy engine** handles financial authority — deterministically, with no ML involved.
+- The **LLM layer** handles natural language, nothing else.
+- The **policy engine** handles financial authority deterministically, with no ML involved.
 - The **payment layer** executes only when the policy engine has explicitly approved a transaction.
 
 No path exists from user input to payment that bypasses the policy engine.

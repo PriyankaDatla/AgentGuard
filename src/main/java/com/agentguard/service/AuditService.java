@@ -1,0 +1,5 @@
+package com.agentguard.service;
+import com.agentguard.dto.AuditEventResponse; import com.agentguard.entity.AuditEvent; import com.agentguard.exception.ResourceNotFoundException; import com.agentguard.repository.*;
+import org.springframework.stereotype.Service; import org.springframework.transaction.annotation.Transactional; import java.util.List;
+@Service @Transactional(readOnly=true)
+public class AuditService { private final AuditEventRepository events; private final TransactionRepository transactions; public AuditService(AuditEventRepository events,TransactionRepository transactions){this.events=events;this.transactions=transactions;} public List<AuditEventResponse> getForTransaction(Long id){if(!transactions.existsById(id))throw new ResourceNotFoundException("Transaction not found: "+id);return events.findByTransactionIdOrderByCreatedAtAsc(id).stream().map(this::toResponse).toList();} private AuditEventResponse toResponse(AuditEvent e){return new AuditEventResponse(e.getId(),e.getTransactionId(),e.getEventType(),e.getDescription(),e.getMetadata(),e.getCreatedAt());} }

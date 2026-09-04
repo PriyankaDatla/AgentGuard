@@ -1,0 +1,4 @@
+package com.agentguard.controller;
+import com.agentguard.dto.*; import com.agentguard.service.*; import jakarta.validation.Valid; import org.springframework.http.*; import org.springframework.web.bind.annotation.*; import java.util.List;
+@RestController @RequestMapping("/api/transactions")
+public class TransactionController { private final TransactionService service; private final PolicyEvaluationService evaluationService; public TransactionController(TransactionService service, PolicyEvaluationService evaluationService){this.service=service;this.evaluationService=evaluationService;} @PostMapping("/evaluate") public ResponseEntity<TransactionEvaluationResponse> evaluate(@Valid @RequestBody EvaluateTransactionRequest request){return ResponseEntity.status(HttpStatus.CREATED).body(evaluationService.evaluate(request));} @GetMapping("/user/{userId}") public List<TransactionResponse> getForUser(@PathVariable Long userId){return service.getForUser(userId);} }

@@ -1,0 +1,5 @@
+package com.agentguard.service;
+import com.agentguard.dto.TransactionResponse; import com.agentguard.entity.Transaction; import com.agentguard.exception.ResourceNotFoundException; import com.agentguard.repository.*;
+import org.springframework.stereotype.Service; import org.springframework.transaction.annotation.Transactional; import java.util.List;
+@Service @Transactional(readOnly=true)
+public class TransactionService { private final TransactionRepository transactions; private final UserRepository users; public TransactionService(TransactionRepository transactions,UserRepository users){this.transactions=transactions;this.users=users;} public List<TransactionResponse> getForUser(Long userId){if(!users.existsById(userId))throw new ResourceNotFoundException("User not found: "+userId);return transactions.findByUserIdOrderByCreatedAtDesc(userId).stream().map(this::toResponse).toList();} private TransactionResponse toResponse(Transaction t){return new TransactionResponse(t.getId(),t.getUserId(),t.getMerchant(),t.getCategory(),t.getRequestedAmount(),t.getActualAmount(),t.getStatus(),t.getRiskScore(),t.getDecisionReason(),t.getCreatedAt());} }
